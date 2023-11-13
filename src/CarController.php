@@ -3,7 +3,7 @@
 class CarController
 {
     private $connection;
-    private $mileageTolerance = 10000; // adjust to your needs
+    private $mileageTolerance = 20000; // adjust to your needs
 
     public function __construct($database)
     {
@@ -24,7 +24,7 @@ class CarController
             $sql .= " AND c.initial_registration = :registration";
         }
         if ($mileage) {
-            $sql .= " AND c.mileage BETWEEN :mileage AND :mileageTolerance";
+            $sql .= " AND c.mileage BETWEEN :mileageToleranceLower AND :mileageToleranceUpper";
         }
         if ($fuelId) {
             $sql .= " AND f.id = :fuelId";
@@ -42,8 +42,8 @@ class CarController
             $statement->bindValue(":registration", $registration);
         }
         if ($mileage) {
-            $statement->bindValue(":mileage", $mileage);
-            $statement->bindValue(":mileageTolerance", $mileage + $this->mileageTolerance);
+            $statement->bindValue(":mileageToleranceLower", $mileage - $this->mileageTolerance / 2);
+            $statement->bindValue(":mileageToleranceUpper", $mileage + $this->mileageTolerance / 2);
         }
         if ($fuelId) {
             $statement->bindValue(":fuelId", $fuelId);
