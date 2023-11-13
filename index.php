@@ -66,12 +66,10 @@ switch ($parts['path']) {
         $brandId = $_GET['brandId'] ? $_GET['brandId'] : null;
         $model = $_GET['model'] ? $_GET['model'] : null;
         $registration = $_GET['registration'] ? $_GET['registration'] : null;
-        $mileage = $_GET['mileage'] ? $_GET['mileage'] : null;
 
         if (!$brandId) throw new Exception('Parameter brandId is required', 400);
         if (!$model) throw new Exception('Parameter model is required', 400);
         if (!$registration) throw new Exception('Parameter registration is required', 400);
-        if (!$mileage) throw new Exception('Parameter mileage is required', 400);
 
         $carController = new CarController($database);
         $carController->getFuels($brandId, $model, $registration, $mileage);

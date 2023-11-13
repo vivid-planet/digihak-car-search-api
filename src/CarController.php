@@ -117,21 +117,18 @@ class CarController
         echo json_encode($data);
     }
 
-    public function getFuels($brandId, $model, $registration, $mileage)
+    public function getFuels($brandId, $model, $registration)
     {
         $sql = "SELECT DISTINCT f.name FROM cars c
             LEFT JOIN fuels f ON c.fuel_id = f.id
             WHERE c.brand_id = :brandId
             AND c.model = :model
-            AND c.initial_registration = :registration
-            AND c.mileage BETWEEN :mileage AND :mileageTolerance";
+            AND c.initial_registration = :registration";
 
         $statement = $this->connection->prepare($sql);
         $statement->bindValue(":brandId", $brandId);
         $statement->bindValue(":model", $model);
         $statement->bindValue(":registration", $registration);
-        $statement->bindValue(":mileage", $mileage);
-        $statement->bindValue(":mileageTolerance", $mileage + $this->mileageTolerance);
         $statement->execute();
 
         $data = [];

@@ -107,7 +107,6 @@ ___
 - brandId (= required)
 - model (= required)
 - registration (= required)
-- mileage (= required)
 
 **&rarr;** gibt alle Krafstoffarten die den Filter-Kriterien (= Parameter) entsprechen zurück
 ___
