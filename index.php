@@ -1,4 +1,20 @@
 <?php
+
+/** When you enable strict type checking, PHP ensures that the data types of function arguments 
+ *  and return values match exactly with the declared types.
+ *  
+ *  Example:
+ * 
+ * function speak(string $name): string
+ * {
+ *     return "Hello {$name}!";
+ *  }
+ * speak(1); // This fires the error "Uncaught TypeError"
+ * speak("Valerio"); // This prints "Hello Valerio!"
+ */
+
+declare(strict_types=1);
+
 include "config.php";
 
 // automatically load the controller classes
@@ -6,7 +22,8 @@ spl_autoload_register(function ($class) {
     require __DIR__ . "/src/$class.php";
 });
 
-set_exception_handler("ErrorHandler::handleExcpetion");
+set_error_handler("ErrorHandler::handleError"); // for php-errors
+set_exception_handler("ErrorHandler::handleException");
 
 header("Content-type: application/json; charset=UTF-8");
 
@@ -20,11 +37,10 @@ if (
     $parts['path'] != "/digihak-car-search/cars/fuels" &&
     $parts['path'] != "/digihak-car-search/cars/rating"
 ) {
-    http_response_code("404");
+    http_response_code(404);
     exit;
 }
 
-// for local deployment only -> has to be put in config-file before deploying to server
 $database = new Database($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD, $DB_PORT);
 
 switch ($parts['path']) {
@@ -72,7 +88,7 @@ switch ($parts['path']) {
         if (!$registration) throw new Exception('Parameter registration is required', 400);
 
         $carController = new CarController($database);
-        $carController->getFuels($brandId, $model, $registration, $mileage);
+        $carController->getFuels($brandId, $model, $registration);
         break;
     case "/digihak-car-search/cars/rating":
         $brandId = $_GET['brandId'] ? $_GET['brandId'] : null;
